@@ -115,6 +115,9 @@ pub fn make_enum_definition_with(
         let index_enum_impl = make_enum_index_impl(enum_);
         let bitwise_impls = make_enum_bitwise_operators(enum_, enum_bitmask.as_ref());
 
+        let empty_token_stream = TokenStream::new();
+        let special_default_impl = enum_.override_default.as_ref().unwrap_or(&empty_token_stream);
+
         let var_trait_set = if enum_.is_exhaustive {
             quote! {
                 fn var_set(field: &mut Self, value: Self::Via) {
@@ -144,6 +147,7 @@ pub fn make_enum_definition_with(
             #engine_trait_impl
             #index_enum_impl
             #bitwise_impls
+            #special_default_impl
 
             impl crate::meta::GodotConvert for #name {
                 type Via = #ord_type;
