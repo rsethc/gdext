@@ -485,13 +485,12 @@ fn make_enum_as_str(enum_: &Enum) -> TokenStream {
 
 /// Creates implementations for bitwise operators for the given enum.
 ///
-/// Currently, for bitfields this is:
+/// Currently, for bitfields this is the following (but that could be expanded in the future):
 /// - [`BitOr`](std::ops::BitOr)
 /// - [`BitOrAssign`](std::ops::BitOrAssign)
 /// - [`BitAnd`](std::ops::BitAnd)
 /// - [`BitAndAssign`](std::ops::BitAndAssign)
 /// - [`Not`](std::ops::Not) (there is not a separate 'BitNot' trait)
-/// but that could be expanded in the future.
 fn make_enum_bitwise_operators(enum_: &Enum, enum_bitmask: Option<&RustTy>) -> TokenStream {
     let name = &enum_.name;
 
