@@ -523,6 +523,14 @@ fn make_enum_bitwise_operators(enum_: &Enum, enum_bitmask: Option<&RustTy>) -> T
                     *self = *self & rhs;
                 }
             }
+
+            impl std::ops::Not for #name {
+                type Output = Self;
+                #[inline]
+                fn not(self) -> Self::Output {
+                    Self { ord: !self.ord }
+                }
+            }
         }
     } else if let Some(mask_enum) = enum_bitmask {
         // Enum that has an accompanying bitfield for masking.
