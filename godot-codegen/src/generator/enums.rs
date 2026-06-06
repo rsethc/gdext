@@ -485,7 +485,7 @@ fn make_enum_as_str(enum_: &Enum) -> TokenStream {
 
 /// Creates implementations for bitwise operators for the given enum.
 ///
-/// Currently, for bitfields this is the following (but that could be expanded in the future):
+/// Currently, for bitfields this is the following (but could be expanded in the future):
 /// - [`BitOr`](std::ops::BitOr)
 /// - [`BitOrAssign`](std::ops::BitOrAssign)
 /// - [`BitAnd`](std::ops::BitAnd)
