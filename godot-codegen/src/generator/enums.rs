@@ -531,6 +531,7 @@ fn make_enum_bitwise_operators(enum_: &Enum, enum_bitmask: Option<&RustTy>) -> T
 
             impl std::ops::Not for #name {
                 type Output = Self;
+
                 #[inline]
                 fn not(self) -> Self::Output {
                     Self { ord: !self.ord }
