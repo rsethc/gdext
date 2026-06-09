@@ -485,7 +485,14 @@ fn make_enum_as_str(enum_: &Enum) -> TokenStream {
 
 /// Creates implementations for bitwise operators for the given enum.
 ///
-/// Currently, this is just [`BitOr`](std::ops::BitOr) for bitfields but that could be expanded in the future.
+/// Currently, for bitfields this is the following:
+/// - [`BitOr`](std::ops::BitOr)
+/// - [`BitOrAssign`](std::ops::BitOrAssign)
+///
+/// While it would be possible to expand these with additional bit-wise operations
+/// such as [`BitAnd`](std::ops::BitAnd) and [`Not`](std::ops::Not), the preferred
+/// way to manipulate flags is to use the `with` and `without` methods rather than
+/// using the bit-wise operators themselves.
 fn make_enum_bitwise_operators(enum_: &Enum, enum_bitmask: Option<&RustTy>) -> TokenStream {
     let name = &enum_.name;
 
@@ -505,6 +512,18 @@ fn make_enum_bitwise_operators(enum_: &Enum, enum_bitmask: Option<&RustTy>) -> T
                 #[inline]
                 fn bitor_assign(&mut self, rhs: Self) {
                     *self = *self | rhs;
+                }
+            }
+
+            impl #name {
+                /// Returns the flags from `self` combined with the flag(s) from `add_flags` arg.
+                pub fn with(self, add_flags: Self) -> Self {
+                    Self { ord: self.ord | add_flags.ord }
+                }
+
+                /// Returns the flags from `self`, except for any that were present in the `remove_flags` arg.
+                pub fn without(self, remove_flags: Self) -> Self {
+                    Self { ord: self.ord & ~remove_flags.ord }
                 }
             }
         }
