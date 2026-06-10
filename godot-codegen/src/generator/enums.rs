@@ -523,7 +523,7 @@ fn make_enum_bitwise_operators(enum_: &Enum, enum_bitmask: Option<&RustTy>) -> T
 
                 /// Returns the flags from `self`, except for any that were present in the `remove_flags` arg.
                 pub fn without(self, remove_flags: Self) -> Self {
-                    Self { ord: self.ord & !remove_flags.ord }
+                    Self { ord: self.ord & (!remove_flags.ord) }
                 }
             }
         }
