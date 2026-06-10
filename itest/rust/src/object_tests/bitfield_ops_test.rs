@@ -5,7 +5,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-use godot::{classes::node::DuplicateFlags, obj::EngineBitfield};
+use godot::classes::node::DuplicateFlags;
+use godot::obj::EngineBitfield;
+
 use crate::framework::itest;
 
 #[itest]
@@ -20,27 +22,21 @@ fn bitfield_ops_with() {
     // Test adding another flag to an existing one.
     assert_eq!(
         DuplicateFlags::GROUPS.with(DuplicateFlags::SIGNALS),
-        DuplicateFlags::from_ord(
-            DuplicateFlags::GROUPS.ord() | DuplicateFlags::SIGNALS.ord()
-        )
+        DuplicateFlags::from_ord(DuplicateFlags::GROUPS.ord() | DuplicateFlags::SIGNALS.ord())
     );
 
     // Test adding flags which are already present,
     // which should result in no change.
     assert_eq!(
-        DuplicateFlags::GROUPS.with(
-            DuplicateFlags::GROUPS
-        ),
+        DuplicateFlags::GROUPS.with(DuplicateFlags::GROUPS),
         DuplicateFlags::GROUPS,
     );
-    
+
     // Test that when adding a flag, where some are
     // already present, the ones that are supposed to
     // be added do in fact get added.
     assert_eq!(
-        DuplicateFlags::GROUPS.with(
-            DuplicateFlags::GROUPS.with(DuplicateFlags::SIGNALS)
-        ),
+        DuplicateFlags::GROUPS.with(DuplicateFlags::GROUPS.with(DuplicateFlags::SIGNALS)),
         DuplicateFlags::GROUPS.with(DuplicateFlags::SIGNALS),
     );
 
@@ -68,12 +64,11 @@ fn bitfield_ops_without() {
             .without(DuplicateFlags::SIGNALS),
         DuplicateFlags::GROUPS
     );
-    
+
     // Test removing a flag that does not exist. The result
     // should be unchanged.
     assert_eq!(
-        DuplicateFlags::GROUPS
-            .without(DuplicateFlags::SIGNALS),
+        DuplicateFlags::GROUPS.without(DuplicateFlags::SIGNALS),
         DuplicateFlags::GROUPS
     );
 
@@ -83,18 +78,14 @@ fn bitfield_ops_without() {
     assert_eq!(
         DuplicateFlags::SIGNALS
             .with(DuplicateFlags::GROUPS)
-            .without(
-                DuplicateFlags::SIGNALS
-                    .with(DuplicateFlags::USE_INSTANTIATION)
-            ),
+            .without(DuplicateFlags::SIGNALS.with(DuplicateFlags::USE_INSTANTIATION)),
         DuplicateFlags::GROUPS
     );
 
     // Test that removing no flags at all is successful
     // and does not result in any change.
     assert_eq!(
-        DuplicateFlags::GROUPS
-            .without(DuplicateFlags::from_ord(0)),
+        DuplicateFlags::GROUPS.without(DuplicateFlags::from_ord(0)),
         DuplicateFlags::GROUPS
     );
 }
