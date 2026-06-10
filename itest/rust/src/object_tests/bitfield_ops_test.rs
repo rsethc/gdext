@@ -31,9 +31,9 @@ fn bitfield_ops_with() {
         DuplicateFlags::from_ord(GROUPS.ord() | SIGNALS.ord())
     );
 
-    assert_eq!(GROUPS.with(GROUPS), GROUPS,);
+    assert_eq!(GROUPS.with(GROUPS), GROUPS);
 
-    assert_eq!(GROUPS.with(GROUPS.with(SIGNALS)), GROUPS.with(SIGNALS),);
+    assert_eq!(GROUPS.with(GROUPS.with(SIGNALS)), GROUPS.with(SIGNALS));
 
     let with_then_with = GROUPS.with(SIGNALS).with(USE_INSTANTIATION);
     assert!(with_then_with.is_set(GROUPS));
