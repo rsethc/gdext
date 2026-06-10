@@ -514,18 +514,6 @@ fn make_enum_bitwise_operators(enum_: &Enum, enum_bitmask: Option<&RustTy>) -> T
                     *self = *self | rhs;
                 }
             }
-
-            impl #name {
-                /// Returns the flags from `self` combined with the flag(s) from `add_flags` arg.
-                pub fn with(self, add_flags: Self) -> Self {
-                    Self { ord: self.ord | add_flags.ord }
-                }
-
-                /// Returns the flags from `self`, except for any that were present in the `remove_flags` arg.
-                pub fn without(self, remove_flags: Self) -> Self {
-                    Self { ord: self.ord & (!remove_flags.ord) }
-                }
-            }
         }
     } else if let Some(mask_enum) = enum_bitmask {
         // Enum that has an accompanying bitfield for masking.
