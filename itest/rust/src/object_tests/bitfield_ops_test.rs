@@ -60,7 +60,11 @@ fn bitfield_ops_without() {
         GROUPS
     );
 
-    let without_then_without = GROUPS.with(SIGNALS).with(USE_INSTANTIATION).without(SIGNALS).without(USE_INSTANTIATION);
+    let without_then_without = GROUPS
+        .with(SIGNALS)
+        .with(USE_INSTANTIATION)
+        .without(SIGNALS)
+        .without(USE_INSTANTIATION);
     assert!(without_then_without.is_set(GROUPS));
     assert!(!without_then_without.is_set(SIGNALS));
     assert!(!without_then_without.is_set(USE_INSTANTIATION));
