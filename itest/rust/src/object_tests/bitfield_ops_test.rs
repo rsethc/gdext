@@ -35,6 +35,11 @@ fn bitfield_ops_with() {
 
     assert_eq!(GROUPS.with(GROUPS.with(SIGNALS)), GROUPS.with(SIGNALS),);
 
+    let with_then_with = GROUPS.with(SIGNALS).with(USE_INSTANTIATION);
+    assert!(with_then_with.is_set(GROUPS));
+    assert!(with_then_with.is_set(SIGNALS));
+    assert!(with_then_with.is_set(USE_INSTANTIATION));
+
     assert_eq!(GROUPS.with(no_flags), GROUPS);
 }
 
@@ -54,6 +59,11 @@ fn bitfield_ops_without() {
             .without(SIGNALS.with(USE_INSTANTIATION)),
         GROUPS
     );
+
+    let without_then_without = GROUPS.with(SIGNALS).with(USE_INSTANTIATION).without(SIGNALS).without(USE_INSTANTIATION);
+    assert!(without_then_without.is_set(GROUPS));
+    assert!(!without_then_without.is_set(SIGNALS));
+    assert!(!without_then_without.is_set(USE_INSTANTIATION));
 
     assert_eq!(GROUPS.without(no_flags), GROUPS);
 }
