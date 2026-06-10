@@ -294,7 +294,7 @@ pub trait EngineBitfield: Copy + 'static {
 
     /// Returns the flags from `self`, except for any that were present in the `remove_flags` arg.
     fn without(self, remove_flags: Self) -> Self {
-        Self::from_ord(self.ord() & (!remove_flags.ord()))
+        Self::from_ord(self.ord() & !remove_flags.ord())
     }
 }
 
