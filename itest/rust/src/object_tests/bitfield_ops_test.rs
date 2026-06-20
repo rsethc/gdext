@@ -37,29 +37,16 @@ fn bitfield_ops_with() {
 
 #[itest]
 fn bitfield_ops_without() {
-    let no_flags = no_flags();
+    let no_flags = DuplicateFlags::from_ord(0);
 
-    assert_eq!(USE_INSTANTIATION.without(USE_INSTANTIATION), no_flags);
+    assert_eq!(no_flags.without(no_flags).ord(), 0);
+    assert_eq!(GROUPS.without(GROUPS).ord(), 0);
 
-    assert_eq!(SIGNALS.with(GROUPS).without(SIGNALS), GROUPS);
+    assert_eq!(GROUPS.without(SIGNALS).ord(), 2);
+    assert_eq!(SIGNALS.with(GROUPS).without(SIGNALS).ord(), 2);
+    assert_eq!(SIGNALS.with(GROUPS).without(SIGNALS.with(SCRIPTS)).ord(), 2);
 
-    assert_eq!(GROUPS.without(SIGNALS), GROUPS);
-
-    assert_eq!(
-        SIGNALS
-            .with(GROUPS)
-            .without(SIGNALS.with(USE_INSTANTIATION)),
-        GROUPS
-    );
-
-    let without_then_without = GROUPS
-        .with(SIGNALS)
-        .with(USE_INSTANTIATION)
-        .without(SIGNALS)
-        .without(USE_INSTANTIATION);
-    assert!(without_then_without.is_set(GROUPS));
-    assert!(!without_then_without.is_set(SIGNALS));
-    assert!(!without_then_without.is_set(USE_INSTANTIATION));
-
-    assert_eq!(GROUPS.without(no_flags), GROUPS);
+    let all = GROUPS.with(SIGNALS).with(SCRIPTS);
+    assert_eq!(all.without(SIGNALS).ord(), 2 | 4);
+    assert_eq!(all.without(SIGNALS).without(SCRIPTS).ord(), 2);
 }
