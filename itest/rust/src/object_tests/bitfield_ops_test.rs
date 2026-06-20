@@ -12,7 +12,7 @@ use crate::framework::itest;
 
 /// Necessarily since `from_ord` is not `const`.
 fn no_flags() -> DuplicateFlags {
-    // Could use `Default::default()` here. Until it is broken by `!1630`, funnily enough.
+    // Avoid `Default::default()` as its value and presence might change in a future version.
     DuplicateFlags::from_ord(0)
 }
 
