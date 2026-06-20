@@ -16,31 +16,23 @@ fn no_flags() -> DuplicateFlags {
     DuplicateFlags::from_ord(0)
 }
 
-const SIGNALS: DuplicateFlags = DuplicateFlags::SIGNALS;
-const GROUPS: DuplicateFlags = DuplicateFlags::GROUPS;
-const USE_INSTANTIATION: DuplicateFlags = DuplicateFlags::USE_INSTANTIATION;
-
+const SIGNALS: DuplicateFlags = DuplicateFlags::SIGNALS; // 1
+const GROUPS: DuplicateFlags = DuplicateFlags::GROUPS;   // 2
+const SCRIPTS: DuplicateFlags = DuplicateFlags::SCRIPTS; // 4
+    
 #[itest]
 fn bitfield_ops_with() {
-    let no_flags = no_flags();
+    let no_flags = DuplicateFlags::from_ord(0);
 
-    assert_eq!(no_flags.with(USE_INSTANTIATION), USE_INSTANTIATION);
+    assert_eq!(no_flags.with(GROUPS).ord(), 2);
+    assert_eq!(GROUPS.with(no_flags).ord(), 2);
+    assert_eq!(GROUPS.with(GROUPS).ord(), 2);
 
-    assert_eq!(
-        GROUPS.with(SIGNALS),
-        DuplicateFlags::from_ord(GROUPS.ord() | SIGNALS.ord())
-    );
+    assert_eq!(GROUPS.with(SIGNALS).ord(), 1 | 2);
+    assert_eq!(GROUPS.with(GROUPS.with(SIGNALS)).ord(), 1 | 2);
+    assert_eq!(GROUPS.with(GROUPS).with(SIGNALS).ord(), 1 | 2);
 
-    assert_eq!(GROUPS.with(GROUPS), GROUPS);
-
-    assert_eq!(GROUPS.with(GROUPS.with(SIGNALS)), GROUPS.with(SIGNALS));
-
-    let with_then_with = GROUPS.with(SIGNALS).with(USE_INSTANTIATION);
-    assert!(with_then_with.is_set(GROUPS));
-    assert!(with_then_with.is_set(SIGNALS));
-    assert!(with_then_with.is_set(USE_INSTANTIATION));
-
-    assert_eq!(GROUPS.with(no_flags), GROUPS);
+    assert_eq!(GROUPS.with(SIGNALS).with(SCRIPTS).ord(), 1 | 2 | 4);
 }
 
 #[itest]
